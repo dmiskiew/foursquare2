@@ -30,6 +30,25 @@ module Foursquare2
 
     # Checkin on behalf of the user.
     #
+    # @param [String] checkin_id the ID of the checkin.
+    # @param [Hash] options
+    # @option options String :text - The text of the reply, up to 200 characters.
+    # @option options String :url - Link for more details.
+    #   This page will be opened in an embedded web view in the foursquare application,
+    #   unless contentId is specified and a native link handler is registered and present.
+    #   We support the following URL schemes: http, https, foursquare, mailto, tel, and sms.
+    # @option options String :contentId - Identifier for the reply to be used in a native link,
+    #   up to 50 characters. A url must also be specified in the request.
+
+    def reply_checkin(checkin_id, options={})
+      response = connection.post do |req|
+        req.url "checkins/#{checkin_id}/reply", options
+      end
+      return_error_or_body(response, response.body.response.checkin)
+    end
+
+    # Reply to a checkin
+    #
     # @param [Hash] options
     # @option options String :venueId - Venue for the checkin.
     # @option options String :venue - For venueless checkins (name or other identifier)
